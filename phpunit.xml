@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         convertDeprecationsToExceptions="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="ApplyControllers">
+            <directory suffix="Test.php">./tests/Feature/Http/Controllers/Apply</directory>
+        </testsuite>
+        <testsuite name="AttachmentControllers">
+            <directory suffix="Test.php">./tests/Feature/Http/Controllers/Attachment</directory>
+        </testsuite>
+        <testsuite name="MessageControllers">
+            <directory suffix="Test.php">./tests/Feature/Http/Controllers/Message</directory>
+        </testsuite>
+        <testsuite name="PdfControllers">
+            <directory suffix="Test.php">./tests/Feature/Http/Controllers/Pdf</directory>
+        </testsuite>
+        <testsuite name="CommonControllers">
+            <directory suffix="Test.php">./tests/Feature/Http/Controllers/Common</directory>
+        </testsuite>
+        <testsuite name="CopyApply">
+            <directory suffix="Test.php">./tests/Feature/Livewire</directory>
+        </testsuite>
+        <testsuite name="Query">
+            <directory suffix="Test.php">./tests/Feature/Query</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./packages</directory>
+        </include>
+    </coverage>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+    </php>
+</phpunit>

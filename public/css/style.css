@@ -1,0 +1,151 @@
+@charset "utf-8";
+/* snappy用CSS */
+
+@font-face {
+  font-family: 'IPAMincho';
+  src: url('./ipam.ttf');
+}
+
+@page {
+  size: A4 portrait;
+}
+
+body {
+  width: 230mm;
+  -webkit-print-color-adjust: exact;
+  font-family: 'IPAMincho', serif;
+  line-height: 1.65em;
+}
+
+* {
+  font-size: 17px;
+}
+
+p {
+  margin: 0.75em 0;
+}
+
+.pdf-page {
+  padding: 15mm 20mm 0;
+  page-break-after: always;
+  page-break-inside: avoid;
+}
+.pdf-page:last-child{
+  page-break-after: auto;
+}
+
+.t-center {
+  text-align: center;
+}
+.t-right {
+  text-align: right;
+}
+.t-bold {
+  font-weight: bold;
+}
+
+.ls-half {
+  letter-spacing: 0.5em;
+}
+.ls-whole {
+  letter-spacing: 1em;
+}
+
+.mgt0 {
+  margin-top: 0;
+}
+.mgt1 {
+  padding-top: 1.75em
+}
+.mgt2 {
+  padding-top: 3.5em
+}
+.mgt3 {
+  padding-top: 5.25em
+}
+.mgt5 {
+  padding-top: 8.75em
+}
+.mgl3 {
+  margin-left: 3em;
+}
+.mgb0 {
+  margin-bottom: 0;
+}
+
+.pd-half {
+  padding: 0.5em;
+}
+.pdl1 {
+  padding-left: 1em;
+}
+.pdl2 {
+  padding-left: 2em;
+}
+.pdl3 {
+  padding-left: 3em;
+}
+.pdl5 {
+  padding-left: 5em;
+}
+
+.enclose {
+  padding: 0.25em;
+  border: 1px solid #000;
+  line-height: 1em;
+}
+
+.disp-ib {
+  display: inline-block;
+}
+
+ul {
+  list-style: none;
+}
+ul.ti {
+  padding-left: 3.8em;
+  text-indent: -1.5em;
+}
+
+table.border {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.border td {
+  padding: 0.25em;
+  border: 1px solid #000;
+}
+table.border td.heavy {
+  border-bottom: 2px solid #000;
+}
+
+.circle {
+  display: inline-block;
+  padding: 0.25em;
+  border: 1px solid #000;
+  border-radius: 1em;
+  line-height: 1em;
+}
+
+.applyUser dt{
+  float: left;
+  clear: left;
+  margin-right:0.5em;
+  width:15%;
+}
+.applyUser dd{
+  float: left;
+  margin-left:0.5em;
+  width:80%;
+}
+.applyUser .last{
+  padding-bottom:1.2em;
+}
+.applyUserLine {
+  clear: both;
+}
+
+ /* --- 透かし文字 BOXの定義 ------------------------------------------------*/
+.main.sample{
+  background-image: url(../img/pdf_sample.png);       /* 背景画像(繰り返し)   */
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ruleset name="NCC01_CognitiveComplexity">
+    <description></description>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <rule ref="CognitiveComplexity.Complexity.MaximumComplexity">
+        <properties>
+            <property name="maxCognitiveComplexity" value="6"/>
+        </properties>
+    </rule>
+</ruleset>

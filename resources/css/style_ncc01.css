@@ -1,0 +1,321 @@
+/* Original CSS Document */
+
+.text-base-500 {
+  color: rgba(216, 209, 194, 1);
+}
+.text-main-500 {
+  color: rgba(70, 130, 126, 1);
+}
+.text-accent-500 {
+  color: rgba(239, 98, 24, 1);
+}
+.text-sub-500 {
+  color: rgba(74, 71, 65, 1);
+}
+.hover\:text-base-500:hover {
+  color: rgba(216, 209, 194, 1);
+}
+.hover\:text-main-500:hover {
+  color: rgba(70, 130, 126, 1);
+}
+.hover\:text-accent-500:hover {
+  color: rgba(239, 98, 24, 1);
+}
+.hover\:text-sub-500:hover {
+  color: rgba(74, 71, 65, 1);
+}
+.hover\:text-white:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.bg-base-300 {
+  background-color: rgba(241, 238, 232, 1);
+}
+.bg-base-500 {
+  background-color: rgba(216, 209, 194, 1);
+}
+.bg-base-700 {
+  background-color: rgba(166, 159, 144, 1);
+}
+.bg-main-300 {
+  background-color: rgba(127, 187, 183, 1);
+}
+.bg-main-500 {
+  background-color: rgba(70, 130, 126, 1);
+}
+.bg-main-700 {
+  background-color: rgba(18, 79, 74, 1);
+}
+.bg-accent-500 {
+  background-color: rgba(239, 98, 24, 1);
+}
+.bg-accent-700 {
+  background-color: rgba(163, 57, 0, 1);
+}
+.bg-sub-500 {
+  background-color: rgba(74, 71, 65, 1);
+}
+.hover\:bg-base-300:hover,
+.focus\:bg-base-300:focus,
+.active\:bg-base-300:active {
+  background-color: rgba(241, 238, 232, 1);
+}
+.hover\:bg-base-500:hover,
+.focus\:bg-base-500:focus,
+.active\:bg-base-500:active {
+  background-color: rgba(216, 209, 194, 1);
+}
+.hover\:bg-base-700:hover,
+.focus\:bg-base-700:focus,
+.active\:bg-base-700:active {
+  background-color: rgba(166, 159, 144, 1);
+}
+.hover\:bg-main-500:hover,
+.focus\:bg-main-500:focus,
+.active\:bg-main-500:active {
+  background-color: rgba(70, 130, 126, 1);
+}
+.hover\:bg-accent-500:hover,
+.focus\:bg-accent-500:focus,
+.active\:bg-accent-500:active {
+  background-color: rgba(239, 98, 24, 1);
+}
+.hover\:bg-sub-500:hover,
+.focus\:bg-sub-500:focus,
+.active\:bg-sub-500:active {
+  background-color: rgba(74, 71, 65, 1);
+}
+
+.display-inlineblock {
+  display: inline-block;
+}
+.top-page a {
+  display: inline-block;
+  width: 90%;
+  max-width: 300px;
+  margin: 1rem;
+  padding: 1rem 0 0.75rem;
+  border-radius: 1rem;
+}
+.top-page a svg {
+  display: inline-block;
+  padding-bottom: 0.25rem;
+}
+
+.menu-button .close,
+.menu-button.show .open {
+  display: none;
+}
+.menu-button.show .close {
+  display: block;
+}
+.menu-list {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  visibility: hidden;
+  opacity: 0;
+  width: 12rem;
+  transition: opacity .3s;
+  border: 1px solid rgba(74, 71, 65, 0.5);
+}
+.menu-list.show {
+  visibility: visible;
+  opacity: 1;
+}
+.menu-list li {
+  border-bottom: 1px solid #AAA;
+}
+.menu-list li:last-child {
+  border-bottom: none;
+}
+.menu-list li svg {
+  display: inline-block;
+}
+
+.speech-bubble-sent {
+  border-radius: 1.5rem 1.5rem 0 1.5rem;
+}
+.speech-bubble-recieved {
+  border-radius: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.text-md {
+	font-size: 0.9rem;
+	line-height: 1.5rem;
+}
+
+header.tab-display {
+  box-shadow: none;
+}
+header.tab-display > div {
+  padding-bottom: 0;
+}
+.button-tab {
+  padding: 1rem 1.5rem 0.75rem;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.label-status {
+  word-break: keep-all;
+}
+
+.progress-bar {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding: 3rem 0 1rem;
+  overflow: hidden;
+}
+.progress-bar::before {
+  position: absolute;
+  content: "";
+  top: calc(2rem - 2px);
+  left: 10%;
+  display: inline-block;
+  width: 80%;
+  height: 5px;
+  background-color: rgba(241, 238, 232, 1);
+}
+.progress-bar li {
+  position: relative;
+  -webkit-box-flex: 1;
+	flex: 1;
+  color: #AAA;
+  text-align: center;
+}
+.progress-bar li.now {
+  color: #000;
+  font-weight: bold;
+}
+.progress-bar li.now::before,
+.progress-bar li.over::before {
+  position: absolute;
+  content: "";
+  top: calc(-1.5rem + 6px);
+  right: 50%;
+  display: inline-block;
+  width: 100%;
+  height: 5px;
+  background-color: rgba(70, 130, 126, 1);
+}
+.progress-bar li:first-child.now::before,
+.progress-bar li:first-child.over::before {
+  width: 0;
+}
+.progress-bar li::after {
+  position: absolute;
+  top: -1.5rem;
+  left: calc(50% - 0.5rem);
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: rgba(241, 238, 232, 1);
+  border-radius: 50%;
+  z-index: 20;
+}
+.progress-bar li.now::after,
+.progress-bar li.over::after {
+  background-color: rgba(70, 130, 126, 1);
+}
+
+nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10000;
+}
+#container {
+  padding-top: 4rem;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 25px;
+    height: 25px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.bg-copied-apply-green {
+    background-color: green;
+    color: #000 !important;
+}
+
+.bg-copied-apply-yellow {
+    background-color: yellow;
+    color: #000 !important;
+}
+
+.bg-accepted-300 {
+    background-color: white;
+    color: #000 !important;
+}
+
+.link-primary {
+    color: #0d6efd !important;
+}
+
+.center-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.memo-icon-inactive {
+  fill:none;
+  stroke: rgba(156, 163, 175, 1);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.memo-icon-inactive:hover {
+  stroke: rgba(216, 209, 194, 1);
+}
+
+.memo-icon-active {
+  fill:none;
+  stroke:rgba(70, 130, 126, 1);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.memo-icon-active:hover {
+  stroke: rgba(216, 209, 194, 1);
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: white;
+}
+
+.alert-success {
+  background-color: #7CC6A5;
+}
+
+.alert-error {
+  background-color: #F09FA1;
+}

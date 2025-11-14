@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<ruleset name="NCC01_PHPMD_RULESET_FOR_PACKAGE"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
+                     http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="
+                     http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+        ruleset of ncc01 project.
+    </description>
+
+    <!-- cleancode StaticAccess を除きすべて適用 -->
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="StaticAccess" />
+    </rule>
+
+    <!-- StaticAccess package以下では、Respect ValidatorへのStaticAccessのみ許可 -->
+    <rule ref="rulesets/cleancode.xml/StaticAccess">
+        <properties>
+            <property name="exceptions">
+                <value>
+                    \Respect\Validation\Validator,
+                    \Carbon\Carbon,
+                </value>
+            </property>
+        </properties>
+    </rule>
+    <!-- codesize 一部適用 -->
+    <!-- 循環的複雑度:11以上は場合NG  -->>
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
+    <!-- 1クラス1000行以上はNG  -->>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+
+    <!-- 1メソッド35行以内（コメント、空行含む）かなり厳しく設定。このルールを守れば全体の品質は自ずと保たれるという読み。 -->>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="35" />
+        </properties>
+    </rule>
+
+    <!-- controversial 一部適用 -->
+    <!-- super globals へ直接アクセスすることを禁止 -->
+    <rule ref="rulesets/controversial.xml/Superglobals" />
+    <!-- キャメルケース/クラス名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseClassName" />
+    <!-- キャメルケース/プロパティ -->
+    <rule ref="rulesets/controversial.xml/CamelCasePropertyName" />
+    <!-- キャメルケース/メソッド名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseMethodName" />
+    <!-- キャメルケース/パラメータ名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
+    <!-- キャメルケース/変数名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
+
+    <!-- design すべて適用 -->
+    <rule ref="rulesets/design.xml" />
+
+    <!-- naming 一部適用 -->
+    <!-- 短いクラス名の禁止（最小3文字） -->
+    <rule ref="rulesets/naming.xml/ShortClassName" />
+    <!-- 短いメソッド名の禁止（最小3文字） -->
+    <rule ref="rulesets/naming.xml/ShortMethodName" />
+    <!-- クラス名コンストラクタの禁止 -->
+    <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass" />
+    <!-- クラス内定数に小文字を使わない -->
+    <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
+    <!-- booleanを返すメソッドはisFoo()かhasFoo() -->
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+
+    <!-- unusedcode すべて適用 -->
+    <rule ref="rulesets/unusedcode.xml" />
+
+
+</ruleset>

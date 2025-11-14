@@ -1,0 +1,202 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/k-yamamoto-balocco/key-value-list.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/k-yamamoto-balocco/laravel-ui-view-composer.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/k-yamamoto-balocco/laravel-ui-utils.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/k-yamamoto-balocco/laravel-ui-cli.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/k-yamamoto-balocco/common-structures.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/briannesbitt/Carbon.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Respect/Validation.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Respect/Stringifier.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/gugunso/read-only-object.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/sebastianbergmann/phpcov.git"
+        }
+    ],
+    "require": {
+        "php": "^8.0.2",
+        "ext-ctype": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "barryvdh/laravel-snappy": "*",
+        "blade-ui-kit/blade-ui-kit": "^0.3.1",
+        "doctrine/dbal": "^3.1",
+        "fruitcake/laravel-cors": "^2.0",
+        "gugunso/read-only-object": "0.1.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "h4cc/wkhtmltoimage-amd64": "0.12.x",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
+        "k-yamamoto-balocco/common-structures": "0.1.0",
+        "k-yamamoto-balocco/key-value-list": "0.1.1",
+        "k-yamamoto-balocco/laravel-ui-cli": "0.1.0",
+        "k-yamamoto-balocco/laravel-ui-utils": "0.1.1",
+        "k-yamamoto-balocco/laravel-ui-view-composer": "0.1.4",
+        "laravel-lang/lang": "^10.1",
+        "laravel/fortify": "^1.8",
+        "laravel/framework": "^9.0",
+        "laravel/jetstream": "^2.4",
+        "laravel/sanctum": "^2.11",
+        "laravel/tinker": "^2.5",
+        "livewire/livewire": "^2.5",
+        "nesbot/carbon": "^2.53",
+        "respect/validation": "^2.2",
+        "s-ichikawa/laravel-sendgrid-driver": "^4.0",
+        "ramsey/uuid": "4.2.x"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "spatie/laravel-ignition": "^1.0",
+        "fakerphp/faker": "^1.9.1",
+        "infection/infection": "^0.25.3",
+        "laravel/sail": "1.14.*",
+        "maglnet/composer-require-checker": "*",
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^6.0",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "phpmd/phpmd": "^2.10",
+        "phpmetrics/phpmetrics": "^2.7",
+        "phpunit/phpcov": "^8.2",
+        "phpunit/phpunit": "^9.3.3",
+        "rarst/phpcs-cognitive-complexity": "^0.2.0",
+        "roave/security-advisories": "dev-latest",
+        "sebastian/phpcpd": "^6.0",
+        "squizlabs/php_codesniffer": "^3.6",
+        "vimeo/psalm": "^4.10"
+    },
+    "autoload": {
+        "files": [
+            "app/helpers/format_datetime.php"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Ncc01\\": "packages/",
+            "Specification\\": "specification/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "composer-require-checker": "vendor/bin/composer-require-checker check composer.json",
+        "parallel-lint": "vendor/bin/parallel-lint ./app ./tests ./packages --exclude ./vendor",
+        "infection": "phpdbg -qrr vendor/bin/infection ",
+        "psalm": "vendor/bin/psalm --no-cache --php-version=8.1",
+        "coding-standards": "vendor/bin/phpcs  ./app ./packages --extensions=php --tab-width=4 -sp --standard=./phpcs_psr12.xml",
+        "phpcbf": "vendor/bin/phpcbf ./app ./tests ./packages --extensions=php --tab-width=4 -q --standard=./phpcs_psr12.xml",
+        "cognitive-complexity": "vendor/bin/phpcs  ./app ./tests ./packages --extensions=php --standard=./phpcs_cc.xml",
+        "phpmd_app": "vendor/bin/phpmd ./app text phpmd_app.xml --ignore-violations-on-exit",
+        "phpmd_package": "vendor/bin/phpmd ./packages text phpmd_package.xml --ignore-violations-on-exit",
+        "phpcpd": "vendor/bin/phpcpd ./app ./packages ",
+        "phpmetrics": "vendor/bin/phpmetrics ./app,./packages --report-html=\"qa/phpmetrics/report\" --report-csv=\"qa/phpmetrics/report/report.csv\" ",
+        "phpmd": [
+            "@phpmd_app",
+            "@phpmd_package"
+        ],
+        "qa-pre-commit": [
+            "@composer-require-checker",
+            "@parallel-lint",
+            "@phpcbf",
+            "@coding-standards",
+            "@psalm"
+        ],
+        "qa-static": [
+            "@composer-require-checker",
+            "@parallel-lint",
+            "@phpcbf",
+            "@coding-standards",
+            "@cognitive-complexity",
+            "@phpmd",
+            "@psalm"
+        ],
+        "qa-dynamic": [
+            "@phpunit"
+        ],
+        "qa-all": [
+            "@qa-static",
+            "@qa-dynamic"
+        ],
+        "phpunit": [
+            "vendor/bin/phpunit"
+        ],
+        "coverage": [
+            "php -d pcov.enabled=1 -d pcov.directory=./ vendor/bin/phpunit --coverage-php qa/coverage/tmp/all.cov",
+            "php -d pcov.enabled=1 -d pcov.directory=./ vendor/bin/phpcov merge --html qa/coverage/html qa/coverage/tmp"
+        ],
+        "coverage-clover": [
+            "php -d pcov.enabled=1 -d pcov.directory=./ vendor/bin/phpunit --coverage-php qa/coverage/tmp/all.cov",
+            "php -d pcov.enabled=1 -d pcov.directory=./ vendor/bin/phpcov merge --clover clover.xml qa/coverage/tmp"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

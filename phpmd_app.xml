@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<ruleset name="NCC01_PHPMD_RULESET_FOR_APP"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
+                     http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="
+                     http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+        ruleset of ncc01 project.
+    </description>
+
+    <exclude-pattern>app/Console/Kernel.php</exclude-pattern>
+    <exclude-pattern>app/Exceptions/Handler.php</exclude-pattern>
+    <exclude-pattern>app/Actions/Fortify/*.php</exclude-pattern>
+    <exclude-pattern>app/Actions/Jetstream/*.php</exclude-pattern>
+    <exclude-pattern>app/Models/TeamInvitation.php</exclude-pattern>
+
+    <exclude-pattern>app/Providers/FortifyServiceProvider.php</exclude-pattern>
+    <exclude-pattern>app/Providers/JetstreamServiceProvider.php</exclude-pattern>
+
+    <!-- https://phpmd.org/rules/ -->
+    <!-- clean code https://phpmd.org/rules/cleancode.html -->
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="StaticAccess" />
+    </rule>
+    <!-- StaticAccess app以下では下記のファサード利用OKとする。 -->
+    <rule ref="rulesets/cleancode.xml/StaticAccess">
+        <properties>
+            <property name="exceptions">
+                <value>
+                    \Illuminate\Support\Facades\App,
+                    \Illuminate\Support\Facades\Artisan,
+                    \Illuminate\Support\Facades\Auth,
+                    \Illuminate\Support\Facades\Blade,
+                    \Illuminate\Support\Facades\Broadcast,
+                    \Illuminate\Support\Facades\Bus,
+                    \Illuminate\Support\Facades\Cache,
+                    \Illuminate\Support\Facades\Config,
+                    \Illuminate\Support\Facades\Cookie,
+                    \Illuminate\Support\Facades\Crypt,
+                    \Illuminate\Support\Facades\Date,
+                    \Illuminate\Support\Facades\DB,
+                    \Illuminate\Support\Facades\Event,
+                    \Illuminate\Support\Facades\File,
+                    \Illuminate\Support\Facades\Gate,
+                    \Illuminate\Support\Facades\Hash,
+                    \Illuminate\Support\Facades\Http,
+                    \Illuminate\Support\Facades\Lang,
+                    \Illuminate\Support\Facades\Log,
+                    \Illuminate\Support\Facades\Mail,
+                    \Illuminate\Support\Facades\Notification,
+                    \Illuminate\Support\Facades\ParallelTesting,
+                    \Illuminate\Support\Facades\Password,
+                    \Illuminate\Support\Facades\Queue,
+                    \Illuminate\Support\Facades\RateLimiter,
+                    \Illuminate\Support\Facades\Redirect,
+                    \Illuminate\Support\Facades\Redis,
+                    \Illuminate\Support\Facades\Request,
+                    \Illuminate\Support\Facades\Response,
+                    \Illuminate\Support\Facades\Route,
+                    \Illuminate\Support\Facades\Schema,
+                    \Illuminate\Support\Facades\Session,
+                    \Illuminate\Support\Facades\Storage,
+                    \Illuminate\Support\Facades\URL,
+                    \Illuminate\Support\Facades\Validator,
+                    \Illuminate\Support\Facades\View,
+                    \Illuminate\Support\Facades\Vite,
+                    \Illuminate\Support\Str,
+                    \Laravel\Fortify\Fortify,
+                    \Laravel\Jetstream\Jetstream,
+                    \Livewire\Livewire,
+                    \Carbon\Carbon,
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- codesize 一部適用 -->
+    <!-- 循環的複雑度:11以上は場合NG  -->>
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
+    <!-- 1クラス1000行以上はNG  -->>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength" />
+
+    <!-- 1メソッド80行以内（コメント、空行含む）-->>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="80" />
+        </properties>
+    </rule>
+
+    <!-- controversial 一部適用 -->
+    <!-- super globals へ直接アクセスすることを禁止 -->
+    <rule ref="rulesets/controversial.xml/Superglobals" />
+    <!-- キャメルケース/クラス名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseClassName" />
+    <!-- キャメルケース/プロパティ -->
+    <rule ref="rulesets/controversial.xml/CamelCasePropertyName" />
+    <!-- キャメルケース/メソッド名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseMethodName" />
+    <!-- キャメルケース/パラメータ名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
+    <!-- キャメルケース/変数名 -->
+    <rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
+
+    <!-- design https://phpmd.org/rules/design.html すべて適用 -->
+    <rule ref="rulesets/design.xml">
+        <exclude name="CouplingBetweenObjects" />
+    </rule>
+
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+        <properties>
+            <!-- 15まで許可 -->
+            <property name="maximum" value="16" />
+        </properties>
+    </rule>
+
+    <!-- naming 一部適用 -->
+    <!-- 短いクラス名の禁止（最小3文字） -->
+    <rule ref="rulesets/naming.xml/ShortClassName" />
+    <!-- 短いメソッド名の禁止（最小3文字） -->
+    <rule ref="rulesets/naming.xml/ShortMethodName" />
+    <!-- クラス名コンストラクタの禁止 -->
+    <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass" />
+    <!-- クラス内定数に小文字を使わない -->
+    <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
+    <!-- booleanを返すメソッドはisFoo()かhasFoo() -->
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+
+    <!-- unusedcode すべて適用 -->
+    <rule ref="rulesets/unusedcode.xml" />
+
+
+</ruleset>

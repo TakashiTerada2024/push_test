@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="3"
+    resolveFromConfigFile="true"
+    strictBinaryOperands="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="app" />
+        <directory name="packages" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <!-- 2025-03-05 yamamoto 暫定対応 -->
+            <file name="app/Query/ApplyList.php" />
+        </ignoreFiles>
+    </projectFiles>
+</psalm>

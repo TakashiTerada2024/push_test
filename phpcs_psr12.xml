@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ruleset name="NCC01_CODING_STANDARDS">
+    <description>ruleset based on PSR12</description>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <rule ref="PSR12"></rule>
+</ruleset>
