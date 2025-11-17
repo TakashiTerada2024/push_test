@@ -1,0 +1,80 @@
+name: EC2 auto deploy with Docker
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    # マージされた場合のみ実行
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      build-success: ${{ steps.docker-build.outcome == 'success' }}
+    steps:
+      # Branchをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Dockerコンテナをビルド
+      - name: Docker build
+        id: docker-build
+        run: |
+          docker build -t ncc01_laravel.ncc_1:latest .
+        continue-on-error: false
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.build-success == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # Branchをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # IP取得ライブラリをインストール
+      - name: Public IP Install
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      # AWS CLIをインストールする
+      - name: AWS CLI install
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update
+          aws --version
+
+      # AWS CLIにキーを設定する
+      - name: AWS set Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      # デプロイする
+      - name: Deploy
+        run: |
+          # SSH のセキュリティグループを開放する
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+          echo "${{ secrets.PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+          # SSH 接続して、git pull と Docker コンテナをビルド・起動する
+          ssh -oStrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }} -i private_key "\
+            cd /home/ec2-user/aws-react-vite && \
+            git fetch --prune && \
+            git checkout master && \
+            git pull origin master && \
+            docker build -t ncc01_laravel.ncc_1:latest . && \
+            docker stop ncc01_laravel.ncc_1 || true && \
+            docker rm ncc01_laravel.ncc_1 || true && \
+            docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest"
+
+          # SSH のセキュリティグループを閉じる
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
