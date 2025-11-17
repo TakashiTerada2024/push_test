@@ -17,8 +17,6 @@ storage/*.key
 .env
 .phpunit.result.cache
 /qa
-/public/css/app.css
 /public/js/app.js
 /public/mix-manifest.json
 /certs
-
