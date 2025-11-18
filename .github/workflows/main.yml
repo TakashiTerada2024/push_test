@@ -80,18 +80,25 @@ jobs:
           fi
 
           # プロジェクトディレクトリの確認とクローン/プル
-          if [ ! -d "/home/ec2-user/ncc01" ]; then
-            echo "=== Directory not found. Cloning repository ==="
+          if [ -d "/home/ec2-user/ncc01/.git" ]; then
+            echo "=== Git repository exists. Pulling latest changes ==="
+            cd /home/ec2-user/ncc01
+            git fetch --prune
+            git checkout master
+            git pull origin master
+          elif [ -d "/home/ec2-user/ncc01" ]; then
+            echo "=== Directory exists but not a git repository. Removing and cloning ==="
+            rm -rf /home/ec2-user/ncc01
             cd /home/ec2-user
             git clone ${{ github.server_url }}/${{ github.repository }}.git ncc01
             cd ncc01
             git checkout master
           else
-            echo "=== Directory exists. Pulling latest changes ==="
-            cd /home/ec2-user/ncc01
-            git fetch --prune
+            echo "=== Directory not found. Cloning repository ==="
+            cd /home/ec2-user
+            git clone ${{ github.server_url }}/${{ github.repository }}.git ncc01
+            cd ncc01
             git checkout master
-            git pull origin master
           fi
 
           echo "=== Docker build ==="
