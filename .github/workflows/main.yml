@@ -70,11 +70,30 @@ jobs:
           # SSH 接続してビルドを実行
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
-          cd /home/ec2-user/ncc01
-          echo "=== Git pull ==="
-          git fetch --prune
-          git checkout master
-          git pull origin master
+
+          # Git のインストール確認とインストール
+          if ! command -v git &> /dev/null; then
+            echo "=== Installing Git ==="
+            sudo dnf install -y git
+          else
+            echo "=== Git is already installed ==="
+          fi
+
+          # プロジェクトディレクトリの確認とクローン/プル
+          if [ ! -d "/home/ec2-user/ncc01" ]; then
+            echo "=== Directory not found. Cloning repository ==="
+            cd /home/ec2-user
+            git clone ${{ github.server_url }}/${{ github.repository }}.git ncc01
+            cd ncc01
+            git checkout master
+          else
+            echo "=== Directory exists. Pulling latest changes ==="
+            cd /home/ec2-user/ncc01
+            git fetch --prune
+            git checkout master
+            git pull origin master
+          fi
+
           echo "=== Docker build ==="
           docker build -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
