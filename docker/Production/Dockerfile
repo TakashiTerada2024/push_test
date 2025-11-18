@@ -59,7 +59,17 @@ COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 COPY php.ini /etc/php/8.1/fpm/conf.d/99-sail.ini
-COPY ncc-prod.conf /etc/nginx/sites-available/default
+# COPY ncc-prod.conf /etc/nginx/sites-available/default
+
+# Default Values for Environment Variables
+ENV ALLOWED_HOST=test.cf.jp.region.balocco.info
+ENV ORIGIN_VERIFY_TOKEN=aB3cD4eF5gH6iJ7kL8mN9oP0qR1sT2uV3wX4yZ5==
+
+COPY ncc-prod.conf /tmp/ncc-prod.conf
+RUN envsubst '${ALLOWED_HOST},${ORIGIN_VERIFY_TOKEN}' < /tmp/ncc-prod.conf > /etc/nginx/sites-available/default \
+    && rm /tmp/ncc-prod.conf
+COPY ncc-nginx.conf /etc/nginx/nginx.conf
+
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 8000
