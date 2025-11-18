@@ -113,6 +113,15 @@ jobs:
           if [ -f "Dockerfile" ]; then
             DOCKERFILE_PATH="."
             echo "Found Dockerfile in root directory"
+          elif [ -f "docker/Production/Dockerfile" ]; then
+            DOCKERFILE_PATH="docker/Production"
+            echo "Found Dockerfile in docker/Production/ directory"
+          elif [ -f "docker/Staging/Dockerfile" ]; then
+            DOCKERFILE_PATH="docker/Staging"
+            echo "Found Dockerfile in docker/Staging/ directory"
+          elif [ -f "docker/Local/Dockerfile" ]; then
+            DOCKERFILE_PATH="docker/Local"
+            echo "Found Dockerfile in docker/Local/ directory"
           elif [ -f "docker/Dockerfile" ]; then
             DOCKERFILE_PATH="docker"
             echo "Found Dockerfile in docker/ directory"
@@ -122,6 +131,9 @@ jobs:
           else
             echo "ERROR: Dockerfile not found in the following locations:"
             echo "  - ./Dockerfile"
+            echo "  - ./docker/Production/Dockerfile"
+            echo "  - ./docker/Staging/Dockerfile"
+            echo "  - ./docker/Local/Dockerfile"
             echo "  - ./docker/Dockerfile"
             echo "  - ./backend/Dockerfile"
             echo ""
@@ -132,6 +144,7 @@ jobs:
 
           echo "=== Docker build ==="
           cd "$DOCKERFILE_PATH"
+          echo "Building from directory: $(pwd)"
           docker build -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
           EOF
