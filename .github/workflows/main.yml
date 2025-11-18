@@ -8,27 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    # マージされた場合のみ実行
-    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    outputs:
-      build-success: ${{ steps.docker-build.outcome == 'success' }}
-    steps:
-      # Branchをチェックアウト
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Dockerコンテナをビルド
-      - name: Docker build
-        id: docker-build
-        run: |
-          docker build -t ncc01_laravel.ncc_1:latest .
-        continue-on-error: false
-
   deploy:
-    needs: build
-    if: needs.build.result == 'success'
+    # マージされた場合または手動実行の場合のみ実行
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       # Branchをチェックアウト
@@ -56,12 +38,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      # デプロイする
-      - name: Deploy
+      # セキュリティグループを開放
+      - name: Open Security Group
+        id: open-sg
         run: |
-          # SSH のセキュリティグループを開放する
           aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
+      # デプロイする
+      - name: Deploy to EC2
+        run: |
           # 秘密鍵を設定
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
@@ -70,22 +55,25 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }} -i private_key "\
             set -e && \
             cd /home/ec2-user/ncc01 && \
+            echo '=== Git pull ===' && \
             git fetch --prune && \
             git checkout master && \
             git pull origin master && \
+            echo '=== Docker build ===' && \
             docker build -t ncc01_laravel.ncc_1:latest . && \
+            echo '=== Stop old container ===' && \
             docker stop ncc01_laravel.ncc_1 || true && \
             docker rm ncc01_laravel.ncc_1 || true && \
-            docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest"
+            echo '=== Start new container ===' && \
+            docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest && \
+            echo '=== Deploy completed ===' && \
+            docker ps | grep ncc01_laravel.ncc_1"
 
-          # SSH のセキュリティグループを閉じる
-          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-
-      # エラー時のクリーンアップ
-      - name: Cleanup on failure
-        if: failure()
-        run: |
-          # セキュリティグループを確実に閉じる
-          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
           # 秘密鍵を削除
           rm -f private_key
+
+      # セキュリティグループを閉じる
+      - name: Close Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
