@@ -101,7 +101,37 @@ jobs:
             git checkout master
           fi
 
+          # 現在のディレクトリとファイル一覧を表示（デバッグ用）
+          echo "=== Current directory ==="
+          pwd
+          echo "=== Files in current directory ==="
+          ls -la
+
+          # Dockerfile を検索
+          echo "=== Searching for Dockerfile ==="
+          DOCKERFILE_PATH=""
+          if [ -f "Dockerfile" ]; then
+            DOCKERFILE_PATH="."
+            echo "Found Dockerfile in root directory"
+          elif [ -f "docker/Dockerfile" ]; then
+            DOCKERFILE_PATH="docker"
+            echo "Found Dockerfile in docker/ directory"
+          elif [ -f "backend/Dockerfile" ]; then
+            DOCKERFILE_PATH="backend"
+            echo "Found Dockerfile in backend/ directory"
+          else
+            echo "ERROR: Dockerfile not found in the following locations:"
+            echo "  - ./Dockerfile"
+            echo "  - ./docker/Dockerfile"
+            echo "  - ./backend/Dockerfile"
+            echo ""
+            echo "Searching entire repository:"
+            find . -name "Dockerfile" -type f 2>/dev/null || echo "No Dockerfile found"
+            exit 1
+          fi
+
           echo "=== Docker build ==="
+          cd "$DOCKERFILE_PATH"
           docker build -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
           EOF
