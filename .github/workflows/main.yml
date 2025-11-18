@@ -88,7 +88,7 @@ jobs:
             git pull origin master
           elif [ -d "/home/ec2-user/ncc01" ]; then
             echo "=== Directory exists but not a git repository. Removing and cloning ==="
-            rm -rf /home/ec2-user/ncc01
+            # rm -rf /home/ec2-user/ncc01
             cd /home/ec2-user
             git clone ${{ github.server_url }}/${{ github.repository }}.git ncc01
             cd ncc01
