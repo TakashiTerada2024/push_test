@@ -49,7 +49,9 @@ jobs:
         id: build
         run: |
           # 秘密鍵を設定
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          cat > private_key << 'KEYEOF'
+          ${{ secrets.SSH_PRIVATE_KEY }}
+          KEYEOF
           chmod 600 private_key
 
           # 秘密鍵の確認（デバッグ用 - 内容は表示しない）
@@ -61,11 +63,12 @@ jobs:
             exit 1
           fi
 
-          # 変数確認（デバッグ用）
-          echo "Connecting to: ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }}"
+          # 接続情報の確認
+          echo "User: ${{ secrets.EC2_USER }}"
+          echo "Host: ${{ secrets.EC2_HOST }}"
 
           # SSH 接続してビルドを実行
-          ssh -o StrictHostKeyChecking=no -i private_key "${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }}" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
           cd /home/ec2-user/ncc01
           echo "=== Git pull ==="
@@ -126,7 +129,9 @@ jobs:
       - name: Deploy to EC2
         run: |
           # 秘密鍵を設定
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          cat > private_key << 'KEYEOF'
+          ${{ secrets.SSH_PRIVATE_KEY }}
+          KEYEOF
           chmod 600 private_key
 
           # 秘密鍵の確認（デバッグ用 - 内容は表示しない）
@@ -138,11 +143,12 @@ jobs:
             exit 1
           fi
 
-          # 変数確認（デバッグ用）
-          echo "Connecting to: ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }}"
+          # 接続情報の確認
+          echo "User: ${{ secrets.EC2_USER }}"
+          echo "Host: ${{ secrets.EC2_HOST }}"
 
           # SSH 接続してデプロイを実行
-          ssh -o StrictHostKeyChecking=no -i private_key "${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }}" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
           echo "=== Stop old container ==="
           docker stop ncc01_laravel.ncc_1 || true
