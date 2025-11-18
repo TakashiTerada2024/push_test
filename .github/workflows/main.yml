@@ -55,8 +55,8 @@ jobs:
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
-          # ビルドスクリプトを作成
-          cat > build.sh << 'SCRIPT'
+          # SSH 接続してビルドを実行
+          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOST_NAME}" << 'EOF'
           set -e
           cd /home/ec2-user/ncc01
           echo "=== Git pull ==="
@@ -66,13 +66,10 @@ jobs:
           echo "=== Docker build ==="
           docker build -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
-          SCRIPT
-
-          # SSH 接続してビルドを実行
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOST_NAME} 'bash -s' < build.sh
+          EOF
 
           # クリーンアップ
-          rm -f private_key build.sh
+          rm -f private_key
 
       # セキュリティグループを閉じる
       - name: Close Security Group
@@ -126,8 +123,8 @@ jobs:
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
-          # デプロイスクリプトを作成
-          cat > deploy.sh << 'SCRIPT'
+          # SSH 接続してデプロイを実行
+          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOST_NAME}" << 'EOF'
           set -e
           echo "=== Stop old container ==="
           docker stop ncc01_laravel.ncc_1 || true
@@ -136,13 +133,10 @@ jobs:
           docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest
           echo "=== Deploy completed ==="
           docker ps | grep ncc01_laravel.ncc_1
-          SCRIPT
-
-          # SSH 接続してデプロイを実行
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOST_NAME} 'bash -s' < deploy.sh
+          EOF
 
           # クリーンアップ
-          rm -f private_key deploy.sh
+          rm -f private_key
 
       # セキュリティグループを閉じる
       - name: Close Security Group
