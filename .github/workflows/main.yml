@@ -145,7 +145,10 @@ jobs:
           echo "=== Docker build ==="
           cd "$DOCKERFILE_PATH"
           echo "Building from directory: $(pwd)"
-          docker build -t ncc01_laravel.ncc_1:latest .
+          docker build \
+            --build-arg WWWGROUP=1000 \
+            --build-arg WWWUSER=1000 \
+            -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
           EOF
 
