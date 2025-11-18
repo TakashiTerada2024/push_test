@@ -47,16 +47,16 @@ jobs:
       # EC2でビルドを実行
       - name: Build on EC2
         id: build
-        env:
-          HOST_NAME: ${{ secrets.HOST_NAME }}
-          USER_NAME: ${{ secrets.USER_NAME }}
         run: |
           # 秘密鍵を設定
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
+          # 変数確認（デバッグ用）
+          echo "Connecting to: ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}"
+
           # SSH 接続してビルドを実行
-          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOST_NAME}" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" << 'EOF'
           set -e
           cd /home/ec2-user/ncc01
           echo "=== Git pull ==="
@@ -115,16 +115,16 @@ jobs:
 
       # デプロイを実行
       - name: Deploy to EC2
-        env:
-          HOST_NAME: ${{ secrets.HOST_NAME }}
-          USER_NAME: ${{ secrets.USER_NAME }}
         run: |
           # 秘密鍵を設定
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
+          # 変数確認（デバッグ用）
+          echo "Connecting to: ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}"
+
           # SSH 接続してデプロイを実行
-          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOST_NAME}" << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" << 'EOF'
           set -e
           echo "=== Stop old container ==="
           docker stop ncc01_laravel.ncc_1 || true
