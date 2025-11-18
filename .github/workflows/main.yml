@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     # マージされた場合のみ実行
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       build-success: ${{ steps.docker-build.outcome == 'success' }}
@@ -28,7 +28,7 @@ jobs:
 
   deploy:
     needs: build
-    if: needs.build.outputs.build-success == 'true'
+    if: needs.build.result == 'success'
     runs-on: ubuntu-latest
     steps:
       # Branchをチェックアウト
@@ -62,12 +62,14 @@ jobs:
           # SSH のセキュリティグループを開放する
           aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
+          # 秘密鍵を設定
           echo "${{ secrets.PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
           # SSH 接続して、git pull と Docker コンテナをビルド・起動する
-          ssh -oStrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }} -i private_key "\
-            cd /home/ec2-user/aws-react-vite && \
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.HOST_NAME }} -i private_key "\
+            set -e && \
+            cd /home/ec2-user/ncc01 && \
             git fetch --prune && \
             git checkout master && \
             git pull origin master && \
@@ -78,3 +80,12 @@ jobs:
 
           # SSH のセキュリティグループを閉じる
           aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      # エラー時のクリーンアップ
+      - name: Cleanup on failure
+        if: failure()
+        run: |
+          # セキュリティグループを確実に閉じる
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32 || true
+          # 秘密鍵を削除
+          rm -f private_key
