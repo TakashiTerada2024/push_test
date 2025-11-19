@@ -143,14 +143,15 @@ jobs:
           fi
 
           echo "=== Docker build ==="
-          cd "$DOCKERFILE_PATH"
+          cd /home/ec2-user/ncc01
           echo "Building from directory: $(pwd)"
           docker build \
             --build-arg WWWGROUP=1000 \
             --build-arg WWWUSER=1000 \
+            -f "$DOCKERFILE_PATH" \
             -t ncc01_laravel.ncc_1:latest \
-            /home/ec2-user/ncc01
-            echo "=== Build completed successfully ==="
+            .
+          echo "=== Build completed successfully ==="
           EOF
 
           # クリーンアップ
