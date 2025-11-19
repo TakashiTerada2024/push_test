@@ -143,14 +143,12 @@ jobs:
           fi
 
           echo "=== Docker build ==="
-          cd /home/ec2-user/ncc01
+          cd "$DOCKERFILE_PATH"
           echo "Building from directory: $(pwd)"
           docker build \
             --build-arg WWWGROUP=1000 \
             --build-arg WWWUSER=1000 \
-            -f "$DOCKERFILE_PATH" \
-            -t ncc01_laravel.ncc_1:latest \
-            .
+            -t ncc01_laravel.ncc_1:latest .
           echo "=== Build completed successfully ==="
           EOF
 
@@ -225,10 +223,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
           echo "=== Stop old container ==="
-          docker stop ncc01_laravel.ncc_1 || true
-          docker rm ncc01_laravel.ncc_1 || true
-          echo "=== Start new container ==="
-          docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest
+          # docker stop ncc01_laravel.ncc_1 || true
+          # docker rm ncc01_laravel.ncc_1 || true
+          # echo "=== Start new container ==="
+          # docker run -d --name ncc01_laravel.ncc_1 -p 80:80 ncc01_laravel.ncc_1:latest
+          docker-compose stop
+          docker-compose build --no-cache laravel.ncc
+          docker-compose up -d
           echo "=== Deploy completed ==="
           docker ps | grep ncc01_laravel.ncc_1
           EOF
