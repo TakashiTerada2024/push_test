@@ -33,7 +33,7 @@
 
                     <div class="mt-8">
                         <div style="padding: 1.5rem 3rem; border: 1px solid #9ca3af; border-radius: 0.5rem; background-color: #1f2937; color: white;">
-                            <h2 class="text-xl font-bold mb-4">CI/CD の動作確認</h2>
+                            <h2 class="text-xl font-bold mb-4">CI/CD の動作確認②</h2>
                             <p class="mb-4">平素より当システムをご利用いただき、誠にありがとうございます。<br>
                             下記の日時におきまして、システムのメンテナンス作業を実施いたします。</p>
 
