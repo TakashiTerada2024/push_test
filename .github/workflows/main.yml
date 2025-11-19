@@ -148,8 +148,9 @@ jobs:
           docker build \
             --build-arg WWWGROUP=1000 \
             --build-arg WWWUSER=1000 \
-            -t ncc01_laravel.ncc_1:latest .
-          echo "=== Build completed successfully ==="
+            -t ncc01_laravel.ncc_1:latest \
+            /home/ec2-user/ncc01
+            echo "=== Build completed successfully ==="
           EOF
 
           # クリーンアップ
